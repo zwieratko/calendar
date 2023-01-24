@@ -315,22 +315,22 @@ function getQuarter {
         }
         Default {
             switch ($realMonth) {
-                {$_ -in (1,2,3)} { 
+                { $_ -in (1, 2, 3) } {
                     $currentMonth = 1
                     $endMonth = 3
-                 }
-                 {$_ -in (4,5,6)} {
+                }
+                { $_ -in (4, 5, 6) } {
                     $currentMonth = 4
                     $endMonth = 6
-                 }
-                 {$_ -in (7,8,9)} {
+                }
+                { $_ -in (7, 8, 9) } {
                     $currentMonth = 7
                     $endMonth = 9
-                 }
-                 {$_ -in (10,11,12)} {
+                }
+                { $_ -in (10, 11, 12) } {
                     $currentMonth = 10
                     $endMonth = 12
-                 }
+                }
                 Default {}
             }
             if ($currentQuarter -notmatch "^$") {
