@@ -367,7 +367,11 @@ function getQuarter {
 function getWhole {
     param (
         [Parameter()]
-        [Int16]
+        [string]
+        $currentMonth,
+
+        [Parameter()]
+        [string]
         $currentYear,
 
         [Parameter()]
@@ -386,7 +390,30 @@ function getWhole {
     if ($enableDebugVerbosity) {
         Write-Host "Fn getWhole :" $PSBoundParameters.Count, " : ", $PSBoundParameters
     }
-    Write-Host "TODO: here will be calendar for whole year: ", $currentYear
+    if (($currentYear -match "^[\d\.]+$") -and ([Int32]$currentYear -gt 0.999) -and ([Int32]$currentYear -le 9999)) {
+        $currentYear = $currentYear
+    }
+    elseif (($currentMonth -match "^[\d\.]+$") -and ([Int32]$currentMonth -gt 0.999) -and ([Int32]$currentMonth -le 9999)) {
+        $currentYear = $currentMonth
+    }
+    elseif ($currentYear -eq "" -and $currentMonth -eq "") {
+        $currentYear = $realYear
+    }
+    # Write-Host "TODO: here will be calendar for whole year: ", $currentYear
+    $params = @{
+        "currentMonth"         = 1
+        "endMonth"             = 3
+        "currentYear"          = $currentYear
+        "enableWeekNr"         = $numberOfWeek
+        "enableJulianDay"      = $julianDay
+        "enableQuarterYear"    = $true
+        "enableDebugVerbosity" = $debugVerbosity
+    }
+    foreach ($quarter in (1, 4, 7, 10)) {
+        $params.currentMonth = $quarter
+        $params.endMonth = $quarter + 2
+        printCalendar @params
+    }
     Exit
 }
 
@@ -703,7 +730,14 @@ switch ($PSBoundParameters.Keys) {
         getQuarter @params
     }
     'wholeYearCalendar' {
-        getWhole
+        $params = @{
+            currentMonth         = $monthSelect
+            currentYear          = $yearSelect
+            enableWeekNr         = $numberOfWeek
+            enableJulianDay      = $julianDay
+            enableDebugVerbosity = $debugVerbosity
+        }
+        getWhole @params
     }
     'version' {
         getVersion
