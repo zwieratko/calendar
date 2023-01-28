@@ -366,7 +366,9 @@ function getQuarter {
             }
         }
     }
-    if (($currentYear -match "^[\d\.]+$") -and ([Int32]$currentYear -gt 0.999) -and ([Int32]$currentYear -le 9999)) {
+    if (($currentYear -match "^[\d\.]+$") -and
+        ([Int32]$currentYear -gt 0.999) -and
+        ([Int32]$currentYear -le 9999)) {
         $currentYear = $currentYear
     }
     elseif ($currentYear -eq "") {
@@ -379,12 +381,12 @@ function getQuarter {
         
     }
     $params = @{
-        "currentMonth"         = $currentMonth
-        "endMonth"             = $endMonth
-        "currentYear"          = $currentYear
-        "enableWeekNr"         = $numberOfWeek
-        "enableJulianDay"      = $julianDay
-        "enableQuarterYear"    = $true
+        "currentMonth"      = $currentMonth
+        "endMonth"          = $endMonth
+        "currentYear"       = $currentYear
+        "enableWeekNr"      = $numberOfWeek
+        "enableJulianDay"   = $julianDay
+        "enableQuarterYear" = $true
     }
     printCalendar @params
     Exit
@@ -411,10 +413,14 @@ function getWhole {
 
     $debugMessage = "Fn getWhole=" + $PSBoundParameters.Count + " " + ($PSBoundParameters | Out-String)
     Write-Debug $debugMessage
-    if (($currentYear -match "^[\d\.]+$") -and ([Int32]$currentYear -gt 0.999) -and ([Int32]$currentYear -le 9999)) {
+    if (($currentYear -match "^[\d\.]+$") -and
+        ([Int32]$currentYear -gt 0.999) -and
+        ([Int32]$currentYear -le 9999)) {
         $currentYear = $currentYear
     }
-    elseif (($currentMonth -match "^[\d\.]+$") -and ([Int32]$currentMonth -gt 0.999) -and ([Int32]$currentMonth -le 9999)) {
+    elseif (($currentMonth -match "^[\d\.]+$") -and
+        ([Int32]$currentMonth -gt 0.999) -and
+        ([Int32]$currentMonth -le 9999)) {
         $currentYear = $currentMonth
     }
     elseif ($currentYear -eq "" -and $currentMonth -eq "") {
@@ -422,12 +428,12 @@ function getWhole {
     }
     # Write-Host "TODO: here will be calendar for whole year: ", $currentYear
     $params = @{
-        "currentMonth"         = 1
-        "endMonth"             = 3
-        "currentYear"          = $currentYear
-        "enableWeekNr"         = $numberOfWeek
-        "enableJulianDay"      = $julianDay
-        "enableQuarterYear"    = $true
+        "currentMonth"      = 1
+        "endMonth"          = 3
+        "currentYear"       = $currentYear
+        "enableWeekNr"      = $numberOfWeek
+        "enableJulianDay"   = $julianDay
+        "enableQuarterYear" = $true
     }
     foreach ($quarter in (1, 4, 7, 10)) {
         $params.currentMonth = $quarter
@@ -499,10 +505,14 @@ function validateUserInput {
     elseif ($monthSelect -match "^de.*") {
         $currentMonth = 12
     }
-    elseif (($monthSelect -match "^[\d\.]+$") -and ([Int32]$monthSelect -ge 1) -and ([Int32]$monthSelect -le 12)) {
+    elseif (($monthSelect -match "^[\d\.]+$") -and
+        ([Int32]$monthSelect -ge 1) -and
+        ([Int32]$monthSelect -le 12)) {
         $currentMonth = $monthSelect
     }
-    elseif (($monthSelect -match "^[\d\.]+$") -and ([Int32]$monthSelect -gt 12) -and ($yearSelected -eq "")) {
+    elseif (($monthSelect -match "^[\d\.]+$") -and
+        ([Int32]$monthSelect -gt 12) -and
+        ($yearSelected -eq "")) {
         <# If there is only one positional params greater than 12, maybe it is year ? #>
         Write-Host "Maybe year?"
         if ([int32]$monthSelect -le 9999) {
@@ -527,7 +537,9 @@ function validateUserInput {
     if (($null -eq $yearSelect) -or ("" -eq $yearSelect)) {
         $currentYear = $realYear
     }
-    elseif (($yearSelect -match "^[\d\.]+$") -and ([Int32]$yearSelect -gt 0.999) -and ([Int32]$yearSelect -le 9999)) {
+    elseif (($yearSelect -match "^[\d\.]+$") -and
+        ([Int32]$yearSelect -gt 0.999) -and
+        ([Int32]$yearSelect -le 9999)) {
         $currentYear = $yearSelect
     }
     else {
@@ -589,14 +601,16 @@ function printCalendar {
     #$dayNrInMonth = 0
     #$numberOfDaysInCurrentMonth = [DateTime]::DaysInMonth($currentYear, $currentMonth)
     #$firstDayInCurrentMonth = (Get-Date -year $currentYear -month $currentMonth -day 01).ToString("dddd")
-    #$startDayInMonth = (1..($dayOfWeekNameLong.Count)) | Where-Object { $dayOfWeekNameLong[$_] -eq $firstDayInCurrentMonth }
+    #$startDayInMonth = (1..($dayOfWeekNameLong.Count)) |
+    #Where-Object { $dayOfWeekNameLong[$_] -eq $firstDayInCurrentMonth }
     $dayNrInMonth = [byte[]]::new(13)
     $numberOfDaysInCurrentMonth = [byte[]]::new(13)
     $startDayInMonth = [byte[]]::new(13)
     foreach ($monthNr in ($currentMonth..$endMonth)) {
         $numberOfDaysInCurrentMonth[$monthNr] = [DateTime]::DaysInMonth($currentYear, $monthNr)
         $firstDayInCurrentMonth = (Get-Date -year $currentYear -month $monthNr -day 01).ToString("dddd")
-        $startDayInMonth[$monthNr] = (1..($dayOfWeekNameLong.Count)) | Where-Object { $dayOfWeekNameLong[$_] -eq $firstDayInCurrentMonth }
+        $startDayInMonth[$monthNr] = (1..($dayOfWeekNameLong.Count)) |
+        Where-Object { $dayOfWeekNameLong[$_] -eq $firstDayInCurrentMonth }
     }
 
     #$topLineWithNameOfDay = [string]::Join(" ", $dayOfWeekNameShort)
@@ -636,7 +650,11 @@ function printCalendar {
                 $monthNameWidth = $monthNameLong[$monthNr - 1].length
                 $leftP = [System.Math]::Ceiling($monthNameWidth + (($weekLineWidth - $monthNameWidth) / 2)) / 3
                 $rightP = $weekLineWidth / 3
-                Write-host -NoNewline ($textInfo.ToTitleCase($monthNameLong[$monthNr - 1])).PadLeft($leftP, " ").PadRight($rightP, " ")
+                Write-host -NoNewline (
+                    $textInfo.ToTitleCase(
+                        $monthNameLong[$monthNr - 1]
+                    )
+                ).PadLeft($leftP, " ").PadRight($rightP, " ")
             }
             elseif ($weekLine -eq 0) {
                 Write-Host -NoNewline $textInfo.ToTitleCase($topLineWithNameOfDay)
@@ -668,7 +686,13 @@ function printCalendar {
                             $dayNrForWeekNr = $dayNrInMonth[$monthNr]
                         }
                         if ($dayNrInMonth[$monthNr] -le 31) {
-                            [int16]$weekNumber = (Get-Date -Year $currentYear -Month $monthNr -Day $dayNrForWeekNr -UFormat %V)
+                            $params = @{
+                                Year    = $currentYear
+                                Month   = $monthNr
+                                Day     = $dayNrForWeekNr
+                                UFormat = %V
+                            }
+                            [int16]$weekNumber = (Get-Date @params)
                             Write-Host -NoNewline ('{0:d2}|' -f $weekNumber)
                         }
                         else {
@@ -678,7 +702,9 @@ function printCalendar {
                     # Is it Sunday ?
                     if ($weekColumn -eq 6) { $fgColor = "White" }
                     # Is it today ?
-                    if (($dayNrInMonth[$monthNr] -eq $realDay) -and ($monthNr -eq $realMonth) -and ($currentYear -eq $realYear)) {
+                    if (($dayNrInMonth[$monthNr] -eq $realDay) -and
+                        ($monthNr -eq $realMonth) -and
+                        ($currentYear -eq $realYear)) {
                         $fgColor = $originalBackgroundColor
                         $bgColor = $originalForegroundColor
                     }
@@ -688,7 +714,12 @@ function printCalendar {
                     }
                     else {
                         if ($enableJulianDay -eq $true) {
-                            $writtenNumberOfDay = (Get-Date -Year $currentYear -Month $monthNr -Day $dayNrInMonth[$monthNr]).DayOfYear
+                            $params = @{
+                                Year  = $currentYear
+                                Month = $monthNr
+                                Day   = $dayNrInMonth[$monthNr]
+                            }
+                            $writtenNumberOfDay = (Get-Date ).DayOfYear
                         }
                         else {
                             $writtenNumberOfDay = $dayNrInMonth[$monthNr]
@@ -718,11 +749,6 @@ function printCalendar {
     startDayInMonth: $startDayInMonth
 "@
     Write-Debug -Message $debugMessage
-    # if ($debugVerbosity) {
-    #     Write-Host "dayNrInMonth:", $dayNrInMonth
-    #     Write-Host "numberOfDaysInCurrentMonth:", $numberOfDaysInCurrentMonth
-    #     Write-Host "startDayInMonth", $startDayInMonth
-    # }
 }
 
 
@@ -736,19 +762,19 @@ switch ($PSBoundParameters.Keys) {
     }
     'quarterYear' {
         $params = @{
-            "currentQuarter"       = $monthSelect
-            "currentYear"          = $yearSelect
-            "enableWeekNr"         = $numberOfWeek
-            "enableJulianDay"      = $julianDay
+            "currentQuarter"  = $monthSelect
+            "currentYear"     = $yearSelect
+            "enableWeekNr"    = $numberOfWeek
+            "enableJulianDay" = $julianDay
         }
         getQuarter @params
     }
     'wholeYear' {
         $params = @{
-            currentMonth         = $monthSelect
-            currentYear          = $yearSelect
-            enableWeekNr         = $numberOfWeek
-            enableJulianDay      = $julianDay
+            currentMonth    = $monthSelect
+            currentYear     = $yearSelect
+            enableWeekNr    = $numberOfWeek
+            enableJulianDay = $julianDay
         }
         getWhole @params
     }
@@ -768,20 +794,16 @@ switch ($PSBoundParameters.Keys) {
     }
 }
 
-# if ($numberOfWeek.IsPresent) {
-#     $showWeekNumbers = $true
-# }
-
 $params = @{
-    "monthSelected"        = $monthSelect
-    "yearSelected"         = $yearSelect
+    "monthSelected" = $monthSelect
+    "yearSelected"  = $yearSelect
 }
 $validInput = validateUserInput @params
 
 $params = @{
-    "currentMonth"         = $validInput[0]
-    "currentYear"          = $validInput[1]
-    "enableWeekNr"         = $numberOfWeek
-    "enableJulianDay"      = $julianDay
+    "currentMonth"    = $validInput[0]
+    "currentYear"     = $validInput[1]
+    "enableWeekNr"    = $numberOfWeek
+    "enableJulianDay" = $julianDay
 }
 printCalendar @params
