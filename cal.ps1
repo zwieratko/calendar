@@ -70,6 +70,11 @@ Specifies the required year in 2-4 digits format in the range 1-9999.
 Without specified numeric value display the current year.
 For example: "2024", "-w", "-whole 2024", "-wholeYear 2025"
 
+.PARAMETER sundayFirst
+-s | -sunday
+Display the Sunday like first day of the week.
+Default first day of the week is Monday.
+
 .PARAMETER numberOfWeek
 -n | -number
 Display the week number in calendar.
@@ -78,8 +83,8 @@ Display the week number in calendar.
 -j | -julian
 Display Julian day instead of classic day in calendar.
 
-.PARAMETER showMeNames
--s | -show
+.PARAMETER listOfNames
+-l | -list
 Display the lists of all names of days and months used in calendar.
 Additional parameters are ignored.
 
@@ -184,10 +189,6 @@ param(
 
     [Parameter()]
     [switch]
-    $showMeNames,
-
-    [Parameter()]
-    [switch]
     $quarterYear,
 
     [Parameter()]
@@ -196,11 +197,19 @@ param(
 
     [Parameter()]
     [switch]
+    $sundayFirst,
+
+    [Parameter()]
+    [switch]
     $numberOfWeek,
 
     [Parameter()]
     [switch]
     $julianDay,
+
+    [Parameter()]
+    [switch]
+    $listOfNames,
 
     [Parameter()]
     [switch]
@@ -220,10 +229,19 @@ $dayOfWeekNameLong = @()
 $dayOfWeekNameShort = @()
 $monthNameLong = @()
 $monthNameShort = @()
-$someMonday = 2             # 2nd January 2023 - Monday
-$someSunday = 8             # 8th January 2023 - Sunday
+$someMonday = 2             # 2nd January 2023 - Monday - default first day of the week
+$someSunday = 8             # 8th January 2023 - Sunday - default last day of the week
 $someMondayMonth = 1        # It is needed for creating the list with name of a days
 $someMondayYear = 2023      # It could be any Monday / Sunday
+
+if ($sundayFirst) {
+    $someMonday = 1         # 1st January 2023 - Sunday - switchable first day of the week
+    $someSunday = 7         # 7th January 2023 - Saturday - switchable last day of the week
+    $sundayWeekColumn = 0
+}
+else {
+    $sundayWeekColumn = 6
+}
 
 if (($IsLinux -eq $true) -or ($IsMacOS -eq $true)) {
     $originalForegroundColor = "Gray"
@@ -321,13 +339,17 @@ Options:
         Without specified numeric value display the current year.
         For example: "2024", "-w", "-whole 2024", "-wholeYear 2025"
 
+    [ -s | -sunday | -sundayFirst]
+        Display the Sunday like first day of the week.
+        Default first day of the week is Monday.
+
     [ -n | -number | -numberOfWeek ]
         Display the week number in calendar.
 
     [ -j | -julian | -julianDay ]
         Display Julian day instead of classic day in calendar.
 
-    [ -s | -show | -showMeNames ]
+    [ -l | -list | -listOfNames ]
         Display the lists of all names of days and months used in calendar.
         Additional parameters are ignored.
 
@@ -765,7 +787,7 @@ function printCalendar {
                         }
                     }
                     # Is it Sunday ?
-                    if ($weekColumn -eq 6) { $fgColor = "White" }
+                    if ($weekColumn -eq $sundayWeekColumn) { $fgColor = "White" }
                     # Is it today ?
                     if (($dayNrInMonth[$monthNr] -eq $realDay) -and
                         ($monthNr -eq $realMonth) -and
@@ -822,7 +844,7 @@ $debugMessage = "Fn Main=" + $PSBoundParameters.Count + " " + ($PSBoundParameter
 Write-Debug -Message $debugMessage
 
 switch ($PSBoundParameters.Keys) {
-    'showMeNames' {
+    'listOfNames' {
         getNames
     }
     'quarterYear' {
