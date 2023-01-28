@@ -56,7 +56,7 @@ Shorter: '-show' / '-s'
 Additional parameters are ignored.
 
 .PARAMETER quarterYear
-Show quarter of the year calendar, three months side by side. (TODO: choose the quarter.)
+Show quarter of the year calendar, three months side by side.
 Shorter '-quarter' / '-q'
 
 .PARAMETER wholeYear
