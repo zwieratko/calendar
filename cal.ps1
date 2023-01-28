@@ -226,9 +226,13 @@ if ($debugVerbosity) {
 }
 
 # Create the list of days name (Monday, Mo)
+$params = @{
+    Year  = $someMondayYear
+    Month = $someMondayMonth
+}
 foreach ($d in ($someMonday..$someSunday)) {
-    $dayOfWeekNameLong += (Get-Date -Year $someMondayYear -Month $someMondayMonth -Day $d).ToString("dddd")
-    $dayOfWeekNameShort += ((Get-Date -Year $someMondayYear -Month $someMondayMonth -Day $d).ToString("ddd")).Substring(0, 2)
+    $dayOfWeekNameLong += (Get-Date @params -Day $d).ToString("dddd")
+    $dayOfWeekNameShort += ((Get-Date @params -Day $d).ToString("ddd")).Substring(0, 2)
 }
 
 # Create the list of month name (January, Jan)
