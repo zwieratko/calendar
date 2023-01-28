@@ -305,10 +305,10 @@ Display the calendar for one month, quarter of the year or whole year.
 Usage:
     cal
     cal [[-m] <month>] [[-y] <year>]
-    cal [-nj] [[-m] <month>] [[-y] <year>]
+    cal [-s | -n | -j] [[-m] <month>] [[-y] <year>]
     cal -q [1|2|3|4] [[-y] <year>]
     cal -w [[-y] <year>]
-    cal [-s | -v | -h]
+    cal [-l | -v | -h]
 
 "@
     $optionsText = @"
