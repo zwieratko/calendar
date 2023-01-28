@@ -71,10 +71,6 @@ Shorter '-number' / '-n'
 Show Julian day instead of classic day in calendar.
 Shorter '-julian' / '-j'
 
-.PARAMETER debugVerbosity
-Show additional debug information.
-Shorter '-debug' / '-d'
-
 .PARAMETER version
 Show the version of program.
 Shorter '-v'
@@ -163,20 +159,16 @@ param(
 
     [Parameter()]
     [switch]
-    $debugVerbosity,
-
-    [Parameter()]
-    [switch]
     $version,
 
     [Parameter()]
     [switch]
     $helpMe
 )
-
-if ($debugVerbosity) {
-    Write-Host "Debug verbosity is increased! Sorry."
+if ($PSBoundParameters['Debug']) {
+    $DebugPreference = 'Continue'
 }
+Write-Debug "Debug verbosity is increased! Sorry."
 
 # VARIABLES
 $dayOfWeekNameLong = @()
@@ -190,20 +182,18 @@ $someMondayYear = 2023      # It could be any Monday / Sunday
 
 if (($IsLinux -eq $true) -or ($IsMacOS -eq $true)) {
     $originalForegroundColor = "Gray"
-    if (($IsLinux -eq $true) -and ($debugVerbosity)) {
-        Write-Host "Host: looks like Linux"
+    if ($IsLinux -eq $true) {
+        Write-Verbose "Host looks like Linux"
         #TODO: autodetect foreground color for Linux
     }
-    elseif ((($IsMacOS -eq $true) -and ($debugVerbosity))) {
-        Write-Host "Host: looks like MacOS"
+    elseif ($IsMacOS -eq $true) {
+        Write-Verbose "Host looks like MacOS"
         #TODO: autodetect foreground color for MacOS
     }
 }
 else {
     $originalForegroundColor = (get-host).ui.rawui.ForegroundColor
-    if ($debugVerbosity) {
-        Write-Host "Host: looks like Windows"
-    }
+    Write-Verbose "Host looks like Windows"
 }
 
 if (($IsLinux -eq $true) -or ($IsMacOS -eq $true)) {
@@ -221,9 +211,8 @@ $realYear = (Get-Date).Year
 
 # It is needed for .ToTitleCase()
 $textInfo = (Get-Culture).TextInfo
-if ($debugVerbosity) {
-    Write-Host "Locale: ", $textInfo.CultureName
-}
+$textInfoCultureName = $textInfo.CultureName
+Write-Verbose "Locale is $textInfoCultureName"
 
 # Create the list of days name (Monday, Mo)
 $params = @{
@@ -328,16 +317,11 @@ function getQuarter {
 
         [Parameter()]
         [bool]
-        $enableJulianDay,
-
-        [Parameter()]
-        [bool]
-        $enableDebugVerbosity
+        $enableJulianDay
     )
 
-    if ($enableDebugVerbosity) {
-        Write-Host "Fn getQuarter :" $PSBoundParameters.Count, " : ", $PSBoundParameters
-    }
+    $debugMessage = "Fn getQuarter=" + $PSBoundParameters.Count + " " + ($PSBoundParameters | Out-String)
+    Write-Debug $debugMessage
     #Write-Host "TODO: here will be calendar for quarter of the year."
     switch -Regex ($currentQuarter) {
         "^1$" { 
@@ -401,7 +385,6 @@ function getQuarter {
         "enableWeekNr"         = $numberOfWeek
         "enableJulianDay"      = $julianDay
         "enableQuarterYear"    = $true
-        "enableDebugVerbosity" = $debugVerbosity
     }
     printCalendar @params
     Exit
@@ -423,16 +406,11 @@ function getWhole {
 
         [Parameter()]
         [bool]
-        $enableJulianDay,
-
-        [Parameter()]
-        [bool]
-        $enableDebugVerbosity
+        $enableJulianDay
     )
 
-    if ($enableDebugVerbosity) {
-        Write-Host "Fn getWhole :" $PSBoundParameters.Count, " : ", $PSBoundParameters
-    }
+    $debugMessage = "Fn getWhole=" + $PSBoundParameters.Count + " " + ($PSBoundParameters | Out-String)
+    Write-Debug $debugMessage
     if (($currentYear -match "^[\d\.]+$") -and ([Int32]$currentYear -gt 0.999) -and ([Int32]$currentYear -le 9999)) {
         $currentYear = $currentYear
     }
@@ -450,7 +428,6 @@ function getWhole {
         "enableWeekNr"         = $numberOfWeek
         "enableJulianDay"      = $julianDay
         "enableQuarterYear"    = $true
-        "enableDebugVerbosity" = $debugVerbosity
     }
     foreach ($quarter in (1, 4, 7, 10)) {
         $params.currentMonth = $quarter
@@ -477,16 +454,11 @@ function validateUserInput {
 
         [Parameter()]
         [string]
-        $yearSelected,
-
-        [Parameter()]
-        [bool]
-        $enableDebugVerbosity
+        $yearSelected
     )
 
-    if ($enableDebugVerbosity) {
-        Write-Host "Fn validate :" $PSBoundParameters.Count, " : ", $PSBoundParameters
-    }
+    $debugMessage = "Fn validateUserInput=" + $PSBoundParameters.Count + " " + ($PSBoundParameters | Out-String)
+    Write-Debug -Message $debugMessage
     # Validate user input (month)
     if (($null -eq $monthSelect) -or ("" -eq $monthSelect)) {
         $currentMonth = $realMonth
@@ -535,7 +507,7 @@ function validateUserInput {
         Write-Host "Maybe year?"
         if ([int32]$monthSelect -le 9999) {
             # [Int16]$validYear = $monthSelect
-            getWhole -currentYear $monthSelect -enableDebugVerbosity $enableDebugVerbosity
+            getWhole -currentYear $monthSelect
         }
         else {
             $yearSelect = $monthSelect
@@ -594,16 +566,11 @@ function printCalendar {
 
         [Parameter()]
         [bool]
-        $enableWholeYear,
-
-        [Parameter()]
-        [bool]
-        $enableDebugVerbosity
+        $enableWholeYear
     )
 
-    if ($enableDebugVerbosity) {
-        Write-Host "Fn main :" $PSBoundParameters.Count, " : ", $PSBoundParameters
-    }
+    $debugMessage = "Fn printCalendar=" + $PSBoundParameters.Count + " " + ($PSBoundParameters | Out-String)
+    Write-Debug -Message $debugMessage
 
     $currentDay = $realDay
     if (($enableQuarterYear -eq $false) -and ($enableWholeYear -eq $false)) {
@@ -745,18 +712,23 @@ function printCalendar {
         }
     }
     Write-Host
-    if ($debugVerbosity) {
-        Write-Host "dayNrInMonth:", $dayNrInMonth
-        Write-Host "numberOfDaysInCurrentMonth:", $numberOfDaysInCurrentMonth
-        Write-Host "startDayInMonth", $startDayInMonth
-    }
+    $debugMessage = @"
+`r`n    dayNrInMonth: $dayNrInMonth
+    numberOfDaysInCurrentMonth: $numberOfDaysInCurrentMonth
+    startDayInMonth: $startDayInMonth
+"@
+    Write-Debug -Message $debugMessage
+    # if ($debugVerbosity) {
+    #     Write-Host "dayNrInMonth:", $dayNrInMonth
+    #     Write-Host "numberOfDaysInCurrentMonth:", $numberOfDaysInCurrentMonth
+    #     Write-Host "startDayInMonth", $startDayInMonth
+    # }
 }
 
 
 # Main
-if ($debugVerbosity) {
-    Write-Host "Main: ", $PSBoundParameters.Count, " : ", $PSBoundParameters
-}
+$debugMessage = "Fn Main=" + $PSBoundParameters.Count + " " + ($PSBoundParameters | Out-String)
+Write-Debug -Message $debugMessage
 
 switch ($PSBoundParameters.Keys) {
     'showMeNames' {
@@ -768,7 +740,6 @@ switch ($PSBoundParameters.Keys) {
             "currentYear"          = $yearSelect
             "enableWeekNr"         = $numberOfWeek
             "enableJulianDay"      = $julianDay
-            "enableDebugVerbosity" = $debugVerbosity
         }
         getQuarter @params
     }
@@ -778,7 +749,6 @@ switch ($PSBoundParameters.Keys) {
             currentYear          = $yearSelect
             enableWeekNr         = $numberOfWeek
             enableJulianDay      = $julianDay
-            enableDebugVerbosity = $debugVerbosity
         }
         getWhole @params
     }
@@ -805,7 +775,6 @@ switch ($PSBoundParameters.Keys) {
 $params = @{
     "monthSelected"        = $monthSelect
     "yearSelected"         = $yearSelect
-    "enableDebugVerbosity" = $debugVerbosity
 }
 $validInput = validateUserInput @params
 
@@ -814,6 +783,5 @@ $params = @{
     "currentYear"          = $validInput[1]
     "enableWeekNr"         = $numberOfWeek
     "enableJulianDay"      = $julianDay
-    "enableDebugVerbosity" = $debugVerbosity
 }
 printCalendar @params
