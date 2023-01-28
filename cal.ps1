@@ -36,49 +36,61 @@
 Simple console calendar.
 
 .DESCRIPTION
-Show calendar for one month, quarter of the year or whole year.
+Display the calendar for one month, quarter of the year or whole year.
 With no parameters will show the current month.
 With valid parameters will show calendar for required month or year in past or in the future.
 
 .PARAMETER monthSelect
-Specifies the required month in 2-digits format in the range 1-12 or in format of full or abbreviated name of month.
-Only one specified numeric parameter in range 1-12 will be understood as month, numeric parameter with higher value will be understood as year.
-Shorter: '-month' / '-m'
+-m | -month
+First positional parameter.
+Specifies the required month in 2 digits format in the range 1-12.
+Or in format of full name or abbreviated name of month.
+Only one specified numeric parameter in range 1-12 will be understood as month.
+Only one numeric parameter with value higher than 12 will be understood as year.
+For example: "12", "-m 12", "-m jan", "-month January", "monthSelect 3"
 
 .PARAMETER yearSelect
+-y | -year
+Second positional parameter.
 Specifies the required year in 2-4 digits format in the range 1-9999.
-Only one specified numeric parameter with value higher than 12 will be understood as year.
-Shorter '-year' / '-y'
-
-.PARAMETER showMeNames
-Show all possible names of days in week and months used in calendar.
-Shorter: '-show' / '-s'
-Additional parameters are ignored.
+Only one numeric parameter with value higher than 12 will be understood as year.
+For example: "2024", "-y 2024", "-year 2027", "-yearSelect 3000"
 
 .PARAMETER quarterYear
-Show quarter of the year calendar, three months side by side.
-Shorter '-quarter' / '-q'
+-q | -quarter
+Display quarter of the year calendar, three months side by side.
+Specifies the required quarter in 1 digits format in the range 1-4.
+Without spoecified numeric value display the current quarter of the current year.
+For example: "-q", "-q 1", "-quarter 2", "-quarterYear 3"
 
 .PARAMETER wholeYear
-Show whole year calendar, three months side by side.
-Shorter: '-whole' / '-w'
+-w | -whole
+Display whole year calendar, three months side by side.
+Specifies the required year in 2-4 digits format in the range 1-9999.
+Without specified numeric value display the current year.
+For example: "2024", "-w", "-whole 2024", "-wholeYear 2025"
 
 .PARAMETER numberOfWeek
-Show the week number in calendar.
-Shorter '-number' / '-n'
+-n | -number
+Display the week number in calendar.
 
 .PARAMETER julianDay
-Show Julian day instead of classic day in calendar.
-Shorter '-julian' / '-j'
+-j | -julian
+Display Julian day instead of classic day in calendar.
+
+.PARAMETER showMeNames
+-s | -show
+Display the lists of all names of days and months used in calendar.
+Additional parameters are ignored.
 
 .PARAMETER version
-Show the version of program.
-Shorter '-v'
+-v
+Display the actuall version of the cal program.
 Additional parameters are ignored.
 
 .PARAMETER helpMe
-Show help information for calendar program.
-Shorter '-h'
+-h | -help
+Display this help information for the cal program.
 Additional parameters are ignored.
 
 .EXAMPLE
@@ -114,6 +126,39 @@ po ut st št pi so ne
 15 16 17 18 19 20 21
 22 23 24 25 26 27 28
 29 30 31
+
+.EXAMPLE
+PS> cal Jan 2030 -n
+
+        Január 2030
+   Po Ut St Št Pi So Ne
+01|   01 02 03 04 05 06
+02|07 08 09 10 11 12 13
+03|14 15 16 17 18 19 20
+04|21 22 23 24 25 26 27
+05|28 29 30 31
+
+.EXAMPLE
+PS> cal December 2042 -j
+
+        December 2042
+Po  Ut  St  Št  Pi  So  Ne
+335 336 337 338 339 340 341
+342 343 344 345 346 347 348
+349 350 351 352 353 354 355
+356 357 358 359 360 361 362
+363 364 365
+
+.EXAMPLE
+PS> cal December 2144 -n -j
+
+           December 2144
+   Po  Ut  St  Št  Pi  So  Ne
+49|    336 337 338 339 340 341
+50|342 343 344 345 346 347 348
+51|349 350 351 352 353 354 355
+52|356 357 358 359 360 361 362
+53|363 364 365 366
 
 .NOTES
 Author: Radovan Snirc
@@ -235,53 +280,73 @@ function getHelp {
         $OptionalParameters
     )
     $usageText = @"
-Cal - simple console calendar
+The cal - simple console calendar
+
+Display the calendar for one month, quarter of the year or whole year.
 
 Usage:
     cal
-    cal [[-m] month] [[-y] year]
-    cal [-nj] [[-m] month] [[-y] year]
-    cal -q [1|2|3|4] [[-y] year]
-    cal -w [[-y] year]
+    cal [[-m] <month>] [[-y] <year>]
+    cal [-nj] [[-m] <month>] [[-y] <year>]
+    cal -q [1|2|3|4] [[-y] <year>]
+    cal -w [[-y] <year>]
     cal [-s | -v | -h]
 
 "@
     $optionsText = @"
 Options:
-    -m | -monthSelect       First positional parameter. 
-                            Specifies the required month in 2 digits format in the range 1-12.
-                            Or in format of full name or abbreviated name of month.
-                            Only one specified numeric parameter in range 1-12 will be understood as month.
-                            Only one numeric parameter with value higher than 12 will be understood as year.
-                            For example: "12", "-m 12", "-m jan", "-m January"
+    [ -m | -month | -monthSelect ] <string>
+        First positional parameter.
+        Specifies the required month in 2 digits format in the range 1-12.
+        Or in format of full name or abbreviated name of month.
+        Only one specified numeric parameter in range 1-12 will be understood as month.
+        Only one numeric parameter with value higher than 12 will be understood as year.
+        For example: "12", "-m 12", "-m jan", "-month January", "monthSelect 3"
 
-    -y | -yearSelect        Second positional parameter.
-                            Specifies the required year in 2-4 digits format in the range 1-9999.
-                            Only one numeric parameter with value higher than 12 will be understood as year.
-                            For example: "2024", "-y 2024"
+    [ -y | -year | -yearSelect ] <string>
+        Second positional parameter.
+        Specifies the required year in 2-4 digits format in the range 1-9999.
+        Only one numeric parameter with value higher than 12 will be understood as year.
+        For example: "2024", "-y 2024", "-year 2027", "-yearSelect 3000"
 
-    -q | -quarterYear       Show quarter of the year calendar, three months side by side.
-                            Specifies the required quarter in 1 digits format in the range 1-4.
-                            Without spoecified numeric value display the current quarter of the current year.
-                            For example: "-q", "-q 1"
+    [ -q | -quarter | -quarterYear ] <string>
+        Display quarter of the year calendar, three months side by side.
+        Specifies the required quarter in 1 digits format in the range 1-4.
+        Without spoecified numeric value display the current quarter of the current year.
+        For example: "-q", "-q 1", "-quarter 2", "-quarterYear 3"
 
-    -w | -wholeYear         Show whole year calendar, three months side by side.
-                            Specifies the required year in 2-4 digits format in the range 1-9999.
-                            Without specified numeric value display the current year.
-                            For example: "2024", "-w", "-w 2024"
+    [ -w | -whole | -wholeYear ] <string>
+        Display whole year calendar, three months side by side.
+        Specifies the required year in 2-4 digits format in the range 1-9999.
+        Without specified numeric value display the current year.
+        For example: "2024", "-w", "-whole 2024", "-wholeYear 2025"
 
-    -n | -numberOfWeek      Show the week number in calendar. No need additional value.
+    [ -n | -number | -numberOfWeek ]
+        Display the week number in calendar.
 
-    -j | -julianDay         Show Julian day instead of classic day in calendar. No need additional value.
+    [ -j | -julian | -julianDay ]
+        Display Julian day instead of classic day in calendar.
 
-    -s | -showMeNames       Show all possible names of days and months used in calendar.
+    [ -s | -show | -showMeNames ]
+        Display the lists of all names of days and months used in calendar.
+        Additional parameters are ignored.
 
-    -v | -version           Show the actuall version of Calendar program.
+    [ -v | -version ]
+        Display the actuall version of the cal program.
+        Additional parameters are ignored.
 
-    -h | -helpMe            Show this help information for Calendar program.
+    [ -h | -help | -helpMe ]
+        Display this help information for the cal program.
+        Additional parameters are ignored.
+
+"@
+    $authorsText = @"
+The cal program and manual were written by Radovan Snirc <zwieratko1@gmail.com>
+
 "@
     Write-Host $usageText
     Write-Host $optionsText
+    Write-Host $authorsText
     Exit
 }
 
@@ -719,7 +784,7 @@ function printCalendar {
                                 Month = $monthNr
                                 Day   = $dayNrInMonth[$monthNr]
                             }
-                            $writtenNumberOfDay = (Get-Date ).DayOfYear
+                            $writtenNumberOfDay = (Get-Date @params ).DayOfYear
                         }
                         else {
                             $writtenNumberOfDay = $dayNrInMonth[$monthNr]
