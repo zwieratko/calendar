@@ -55,11 +55,11 @@ Show all possible names of days in week and months used in calendar.
 Shorter: '-show' / '-s'
 Additional parameters are ignored.
 
-.PARAMETER quarterYearCalendar
+.PARAMETER quarterYear
 Show quarter of the year calendar, three months side by side. (TODO: choose the quarter.)
 Shorter '-quarter' / '-q'
 
-.PARAMETER wholeYearCalendar
+.PARAMETER wholeYear
 Show whole year calendar, three months side by side.
 Shorter: '-whole' / '-w'
 
@@ -147,11 +147,11 @@ param(
 
     [Parameter()]
     [switch]
-    $quarterYearCalendar,
+    $quarterYear,
 
     [Parameter()]
     [switch]
-    $wholeYearCalendar,
+    $wholeYear,
 
     [Parameter()]
     [switch]
@@ -719,7 +719,7 @@ switch ($PSBoundParameters.Keys) {
     'showMeNames' {
         getNames
     }
-    'quarterYearCalendar' {
+    'quarterYear' {
         $params = @{
             "currentQuarter"       = $monthSelect
             "currentYear"          = $yearSelect
@@ -729,7 +729,7 @@ switch ($PSBoundParameters.Keys) {
         }
         getQuarter @params
     }
-    'wholeYearCalendar' {
+    'wholeYear' {
         $params = @{
             currentMonth         = $monthSelect
             currentYear          = $yearSelect
