@@ -690,7 +690,7 @@ function printCalendar {
                                 Year    = $currentYear
                                 Month   = $monthNr
                                 Day     = $dayNrForWeekNr
-                                UFormat = %V
+                                UFormat = "%V"
                             }
                             [int16]$weekNumber = (Get-Date @params)
                             Write-Host -NoNewline ('{0:d2}|' -f $weekNumber)
