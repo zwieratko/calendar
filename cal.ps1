@@ -245,15 +245,54 @@ function getHelp {
     param (
         $OptionalParameters
     )
-    Write-Host "cal - simple console calendar"
-    Write-Host "Usage:"
-    Write-Host "cal"
-    Write-Host "cal [month]"
-    Write-Host "cal [[month] year]"
-    Write-Host "cal [-m month] [-y year]"
-    Write-Host "cal [-njdqw] [[month] year]"
-    Write-Host "cal [-njdqw] [-m month] [-y year]"
-    Write-Host "cal [-svhd]"
+    $usageText = @"
+Cal - simple console calendar
+
+Usage:
+    cal
+    cal [[-m] month] [[-y] year]
+    cal [-nj] [[-m] month] [[-y] year]
+    cal -q [1|2|3|4] [[-y] year]
+    cal -w [[-y] year]
+    cal [-s | -v | -h]
+
+"@
+    $optionsText = @"
+Options:
+    -m | -monthSelect       First positional parameter. 
+                            Specifies the required month in 2 digits format in the range 1-12.
+                            Or in format of full name or abbreviated name of month.
+                            Only one specified numeric parameter in range 1-12 will be understood as month.
+                            Only one numeric parameter with value higher than 12 will be understood as year.
+                            For example: "12", "-m 12", "-m jan", "-m January"
+
+    -y | -yearSelect        Second positional parameter.
+                            Specifies the required year in 2-4 digits format in the range 1-9999.
+                            Only one numeric parameter with value higher than 12 will be understood as year.
+                            For example: "2024", "-y 2024"
+
+    -q | -quarterYear       Show quarter of the year calendar, three months side by side.
+                            Specifies the required quarter in 1 digits format in the range 1-4.
+                            Without spoecified numeric value display the current quarter of the current year.
+                            For example: "-q", "-q 1"
+
+    -w | -wholeYear         Show whole year calendar, three months side by side.
+                            Specifies the required year in 2-4 digits format in the range 1-9999.
+                            Without specified numeric value display the current year.
+                            For example: "2024", "-w", "-w 2024"
+
+    -n | -numberOfWeek      Show the week number in calendar. No need additional value.
+
+    -j | -julianDay         Show Julian day instead of classic day in calendar. No need additional value.
+
+    -s | -showMeNames       Show all possible names of days and months used in calendar.
+
+    -v | -version           Show the actuall version of Calendar program.
+
+    -h | -helpMe            Show this help information for Calendar program.
+"@
+    Write-Host $usageText
+    Write-Host $optionsText
     Exit
 }
 
