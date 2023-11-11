@@ -699,7 +699,7 @@ function printCalendar {
         $startDayInMonth[$monthNr] = (1..($dayOfWeekNameLong.Count)) |
         Where-Object { $dayOfWeekNameLong[$_] -eq $firstDayInCurrentMonth }
     }
-
+    # if ($enableJulianDay) {$topLineWithNameOfDay += " "}
     #$topLineWithNameOfDay = [string]::Join(" ", $dayOfWeekNameShort)
     foreach ($iterDay in (0..6)) {
         $topLineWithNameOfDay += $dayOfWeekNameShort[$iterDay]
@@ -787,8 +787,8 @@ function printCalendar {
                         }
                     }
                     # Is it Sunday ?
-                    if ($weekColumn -eq $sundayWeekColumn) { $fgColor = "White" }
-                    # Is it today ?
+                    # if ($weekColumn -eq $sundayWeekColumn) { $fgColor = "White" }
+                    # Is it today ? beginning of string
                     if (($dayNrInMonth[$monthNr] -eq $realDay) -and
                         ($monthNr -eq $realMonth) -and
                         ($currentYear -eq $realYear)) {
@@ -816,7 +816,8 @@ function printCalendar {
                             "ForegroundColor" = $fgColor
                             "NoNewline"       = $true
                         }
-                        Write-Host @params ("{0:d$paddingSpaces} " -f $writtenNumberOfDay)
+                        Write-Host @params ("{0:d$paddingSpaces}" -f [int]$writtenNumberOfDay)
+                        Write-Host -NoNewline " "
                     }
                     $bgColor = $originalBackgroundColor
                     $fgColor = $originalForegroundColor
