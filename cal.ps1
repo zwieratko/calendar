@@ -167,13 +167,13 @@ PS> cal December 2144 -n -j
 
 .NOTES
 Author: Radovan Snirc
-Version 0.01.001
-Date: 2023-01-05
+Version 0.0.2
+Date: 2023-11-11
 TODO:
-    Validate month via abbreviated name
-    Show not only one month :)
-    Show whole year
-    Show week numbers
+    done - Validate month via abbreviated name
+    done - Show not only one month :)
+    done - Show whole year
+    done - Show week numbers
 #>
 
 # PARAMS
@@ -535,7 +535,7 @@ function getVersion {
         $OptionalParameters
     )
     Write-Host "cal - simple console calendar"
-    Write-Host "Version: 0.001.001"
+    Write-Host "Version: 0.0.2"
     Exit
 }
 
