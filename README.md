@@ -1,4 +1,4 @@
-![Screenshot of the cal](img/screenshot-of-the-cal.png)
+![Screenshot of the cal](img/small-screenshot-of-the-cal.png)
 
 # The cal
 
@@ -6,7 +6,7 @@ Simple console calendar.
 
 ## Description
 
-Calendar is a script that displays simple calendar for a month, a quarter or whole year. It is inspired by beautiful utility "cal" from Unix-like OS world and implemented in Microsoft PowerShell.
+**The cal** is a script that displays simple calendar for a month, a quarter or whole year. It is inspired by beautiful utility "cal" from Unix-like OS world and implemented in Microsoft PowerShell.
 
 ## Motivation
 
@@ -102,3 +102,7 @@ cal [-l | -v | -h]
     [ -h | -help | -helpMe ]
         Display this help information for the cal program.
         Additional parameters will be ignored.
+
+---
+
+![Screenshot of the cal](img/screenshot-of-the-cal.png)
