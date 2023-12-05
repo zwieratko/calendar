@@ -1,7 +1,7 @@
 
 <#PSScriptInfo
 
-.VERSION 0.001.001
+.VERSION 0.0.3
 
 .GUID 568a6011-3309-4352-b100-ef97cc3b06f6
 
@@ -167,7 +167,7 @@ PS> cal December 2144 -n -j
 
 .NOTES
 Author: Radovan Snirc
-Version 0.0.2
+Version 0.0.3
 Date: 2023-11-11
 TODO:
     done - Validate month via abbreviated name
@@ -538,7 +538,7 @@ function getVersion {
         $OptionalParameters
     )
     Write-Host "cal - simple console calendar"
-    Write-Host "Version: 0.0.2"
+    Write-Host "Version: 0.0.3"
     Exit
 }
 
