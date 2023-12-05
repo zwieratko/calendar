@@ -36,67 +36,67 @@
 Simple console calendar.
 
 .DESCRIPTION
-Display the calendar for one month, quarter of the year or whole year.
-With no parameters will show the current month.
-With valid parameters will show calendar for required month or year in past or in the future.
+Displays the calendar for a month, quarter, or year.
+Without parameters, displays the calendar for the current month of the current year.
+With valid parameters, it displays the calendar for the desired month, quarter, or year in the past or future.
 
 .PARAMETER monthSelect
--m | -month
+[-m | -month | -monthSelect ] <string>
 First positional parameter.
-Specifies the required month in 2 digits format in the range 1-12.
-Or in format of full name or abbreviated name of month.
-Only one specified numeric parameter in range 1-12 will be understood as month.
-Only one numeric parameter with value higher than 12 will be understood as year.
-For example: "12", "-m 12", "-m jan", "-month January", "monthSelect 3"
+Specifies the desired month in 1-2 digit format in the range 1-12.
+Or in the format of the full name or abbreviated name of the month.
+Only one specified numeric parameter specified in the range 1-12 is considered a month.
+Only one numeric parameter with a value greater than 12 will be understood as year.
+For example: "12", "-m 12", "-m dec", "-month December", "monthSelect 12"
 
 .PARAMETER yearSelect
--y | -year
+[ -y | -year | -yearSelect ] <string>
 Second positional parameter.
-Specifies the required year in 2-4 digits format in the range 1-9999.
-Only one numeric parameter with value higher than 12 will be understood as year.
-For example: "2024", "-y 2024", "-year 2027", "-yearSelect 3000"
+Specifies the desired year in 2-4 digit format in the range 1-9999.
+Only one numeric parameter with a value greater than 12 is considered a year.
+For example: "2024", "-y 2024", "-year 2024", "-yearSelect 2024"
 
 .PARAMETER quarterYear
--q | -quarter
-Display quarter of the year calendar, three months side by side.
-Specifies the required quarter in 1 digits format in the range 1-4.
-Without spoecified numeric value display the current quarter of the current year.
-For example: "-q", "-q 1", "-quarter 2", "-quarterYear 3"
+[ -q | -quarter | -quarterYear ] <string>
+Display the quarter of the year calendar, three months side by side.
+Specifies the desired quarter in 1-digit format in the range 1-4.
+Without spoecifying a numeric value, displays the current quarter of the current year.
+For example: "-q", "-q 1", "-quarter 1", "-quarterYear 1"
 
 .PARAMETER wholeYear
--w | -whole
-Display whole year calendar, three months side by side.
-Specifies the required year in 2-4 digits format in the range 1-9999.
-Without specified numeric value display the current year.
-For example: "2024", "-w", "-whole 2024", "-wholeYear 2025"
+[ -w | -whole | -wholeYear ] <string>
+Display full year calendar, three months side by side.
+Specifies the desired year in 2-4 digit format in the range 1-9999.
+Without specifying a numeric value, displays the current year.
+For example: "2024", "-w", "-whole 2024", "-wholeYear 2024"
 
 .PARAMETER sundayFirst
--s | -sunday
-Display the Sunday like first day of the week.
-Default first day of the week is Monday.
+[ -s | -sunday | -sundayFirst]
+Display the Sunday as the first day of the week.
+By default, the first day of the week is Monday.
 
 .PARAMETER numberOfWeek
--n | -number
-Display the week number in calendar.
+[ -n | -number | -numberOfWeek ]
+Display the week number in the calendar.
 
 .PARAMETER julianDay
--j | -julian
-Display Julian day instead of classic day in calendar.
+[ -j | -julian | -julianDay ]
+Display Julian day instead of classical day in the calendar.
 
 .PARAMETER listOfNames
--l | -list
-Display the lists of all names of days and months used in calendar.
-Additional parameters are ignored.
+[ -l | -list | -listOfNames ]
+Display the lists of all names of days and months used in the calendar.
+Additional parameters will be ignored.
 
 .PARAMETER version
--v
-Display the actuall version of the cal program.
-Additional parameters are ignored.
+[ -v | -version ]
+Display the actual version of the cal program.
+Additional parameters will be ignored.
 
 .PARAMETER helpMe
--h | -help
+[ -h | -help | -helpMe ]
 Display this help information for the cal program.
-Additional parameters are ignored.
+Additional parameters will be ignored.
 
 .EXAMPLE
 PS> cal
@@ -174,6 +174,7 @@ TODO:
     done - Show not only one month :)
     done - Show whole year
     done - Show week numbers
+    Show the date of Easter
 #>
 
 # PARAMS
@@ -300,7 +301,9 @@ function getHelp {
     $usageText = @"
 The cal - simple console calendar
 
-Display the calendar for one month, quarter of the year or whole year.
+Displays the calendar for a month, quarter, or year.
+Without parameters, displays the calendar for the current month of the current year.
+With valid parameters, it displays the calendar for the desired month, quarter, or year in the past or future.
 
 Usage:
     cal
@@ -315,51 +318,51 @@ Usage:
 Options:
     [ -m | -month | -monthSelect ] <string>
         First positional parameter.
-        Specifies the required month in 2 digits format in the range 1-12.
-        Or in format of full name or abbreviated name of month.
-        Only one specified numeric parameter in range 1-12 will be understood as month.
-        Only one numeric parameter with value higher than 12 will be understood as year.
-        For example: "12", "-m 12", "-m jan", "-month January", "monthSelect 3"
+        Specifies the desired month in 1-2 digit format in the range 1-12.
+        Or in the format of the full name or abbreviated name of the month.
+        Only one specified numeric parameter specified in the range 1-12 is considered a month.
+        Only one numeric parameter with a value greater than 12 will be understood as year.
+        For example: "12", "-m 12", "-m dec", "-month December", "monthSelect 12"
 
     [ -y | -year | -yearSelect ] <string>
         Second positional parameter.
-        Specifies the required year in 2-4 digits format in the range 1-9999.
-        Only one numeric parameter with value higher than 12 will be understood as year.
-        For example: "2024", "-y 2024", "-year 2027", "-yearSelect 3000"
+        Specifies the desired year in 2-4 digit format in the range 1-9999.
+        Only one numeric parameter with a value greater than 12 is considered a year.
+        For example: "2024", "-y 2024", "-year 2024", "-yearSelect 2024"
 
     [ -q | -quarter | -quarterYear ] <string>
-        Display quarter of the year calendar, three months side by side.
-        Specifies the required quarter in 1 digits format in the range 1-4.
-        Without spoecified numeric value display the current quarter of the current year.
-        For example: "-q", "-q 1", "-quarter 2", "-quarterYear 3"
+        Display the quarter of the year calendar, three months side by side.
+        Specifies the desired quarter in 1-digit format in the range 1-4.
+        Without spoecifying a numeric value, displays the current quarter of the current year.
+        For example: "-q", "-q 1", "-quarter 1", "-quarterYear 1"
 
     [ -w | -whole | -wholeYear ] <string>
-        Display whole year calendar, three months side by side.
-        Specifies the required year in 2-4 digits format in the range 1-9999.
-        Without specified numeric value display the current year.
-        For example: "2024", "-w", "-whole 2024", "-wholeYear 2025"
+        Display full year calendar, three months side by side.
+        Specifies the desired year in 2-4 digit format in the range 1-9999.
+        Without specifying a numeric value, displays the current year.
+        For example: "2024", "-w", "-whole 2024", "-wholeYear 2024"
 
     [ -s | -sunday | -sundayFirst]
-        Display the Sunday like first day of the week.
-        Default first day of the week is Monday.
+        Display the Sunday as the first day of the week.
+        By default, the first day of the week is Monday.
 
     [ -n | -number | -numberOfWeek ]
-        Display the week number in calendar.
+        Display the week number in the calendar.
 
     [ -j | -julian | -julianDay ]
-        Display Julian day instead of classic day in calendar.
+        Display Julian day instead of classical day in the calendar.
 
     [ -l | -list | -listOfNames ]
-        Display the lists of all names of days and months used in calendar.
-        Additional parameters are ignored.
+        Display the lists of all names of days and months used in the calendar.
+        Additional parameters will be ignored.
 
     [ -v | -version ]
-        Display the actuall version of the cal program.
-        Additional parameters are ignored.
+        Display the actual version of the cal program.
+        Additional parameters will be ignored.
 
     [ -h | -help | -helpMe ]
         Display this help information for the cal program.
-        Additional parameters are ignored.
+        Additional parameters will be ignored.
 
 "@
     $authorsText = @"
